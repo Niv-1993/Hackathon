@@ -25,13 +25,13 @@ def run():
     while True:
         offer, serverAddress = UDP_clientSocket.recvfrom(BUFFER_SIZE)  # blocking
         print("Received offer from {0}, attempting to connect...".format(serverAddress[0]))
+        TCP_clientSocket = socket(AF_INET, SOCK_STREAM)
         try:
             # check that the offer is valid as instructed
             # I - unsigned int(4 bytes) B- unsigned char(1 byte) H -"unsigned short(2 bytes)
             cookie, msg_type, TCP_server_port = struct.unpack('IBH', offer)
             if cookie == EXPECTED_COOKIE and msg_type == EXPECTED_OFFER_TYPE:
                 server_IP_PORT = (serverAddress[0], TCP_server_port)
-                TCP_clientSocket = socket(AF_INET, SOCK_STREAM)
                 TCP_clientSocket.connect(server_IP_PORT)  # if it fails it will continue the loop for other offers
                 # send the server out team name
                 TCP_clientSocket.send(TEAM_NAME.encode())
@@ -45,6 +45,7 @@ def run():
             else:
                 print(INVALID_OFFER_FORMAT)
         except:
+            TCP_clientSocket.close()
             continue
 
 
@@ -59,6 +60,7 @@ def answerQuestion(TCP_clientSocket):
                 ans = TCP_clientSocket.recv(BUFFER_SIZE).decode()
                 print(ans)
     except:
+        TCP_clientSocket.close()
         print("Something went wrong in the answerQuestion method")
 
 

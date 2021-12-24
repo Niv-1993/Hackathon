@@ -34,9 +34,11 @@ def sendBroadcastToClients():
 
 
 def openTCPSocket():
-    serverAddress = get_if_addr('eth1')
+    # serverAddress = get_if_addr('eth1')
+    serverAddress = "192.168.56.1"
     serverSocket = socket(AF_INET, SOCK_STREAM)
-    serverSocket.bind((serverAddress, TCP_serverPORT))
+    # serverSocket.bind((serverAddress, TCP_serverPORT))
+    serverSocket.bind(('', TCP_serverPORT))
     serverSocket.listen(2)
     print("Server started, listening on IP {0}".format(serverAddress))
     return serverSocket
@@ -52,7 +54,7 @@ def generateStartMsg(team1_name, team2_name):
     question, ans = generateQuestion()
     return "Welcome to Quick Math.\n" \
            "Player 1: {0}Player 2: {1}==\n" \
-           "Please answer the following question as fast as yuo can:\n" \
+           "Please answer the following question as fast as you can:\n" \
            "How much is {2}?\n".format(
         team1_name, team2_name, question), str(ans)
 
@@ -69,10 +71,10 @@ def generateEndMsg(team1_name, team1_ans, team2_name, team2_ans, ans):
 
 
 def initGame():
+    global connectedPlayers
+    team1_socket = connectedPlayers[0][0]
+    team2_socket = connectedPlayers[1][0]
     try:
-        global connectedPlayers
-        team1_socket = connectedPlayers[0][0]
-        team2_socket = connectedPlayers[1][0]
         team1_name = team1_socket.recv(BUFFER_SIZE).decode()
         team2_name = team2_socket.recv(BUFFER_SIZE).decode()
         question, ans = generateStartMsg(team1_name, team2_name)
@@ -97,6 +99,8 @@ def initGame():
         team2_socket.close()
         connectedPlayers = []  # clean list and ready for next session
     except:
+        team1_socket.close()
+        team2_socket.close()
         print("Something went wrong during the game")
 
 
