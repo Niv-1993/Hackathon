@@ -48,10 +48,10 @@ def sendBroadcastToClients():
 
 
 def openTCPSocket():
-    # serverAddress = get_if_addr('eth1')
-    serverAddress = "192.168.56.1"
+    serverAddress = get_if_addr('eth1')
+    # serverAddress = "192.168.56.1"
     serverSocket = socket(AF_INET, SOCK_STREAM)
-    # serverSocket.bind((serverAddress, TCP_serverPORT))
+    serverSocket.bind((serverAddress, TCP_serverPORT))
     serverSocket.bind(('', TCP_serverPORT))
     serverSocket.listen(2)
     print(UNDERLINE + "Server started, listening on IP {0}".format(serverAddress))
