@@ -42,13 +42,13 @@ def sendBroadcastToClients():
     UDP_serverSocker.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
     UDP_serverSocker.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     while len(connectedPlayers) < 2:
-        cast = struct.pack('IBH', COOKIE, TYPE, TCP_serverPORT)
+        cast = struct.pack('!IBH', COOKIE, TYPE, TCP_serverPORT)
         UDP_serverSocker.sendto(cast, UDP_ADDRESS)
         time.sleep(1)
 
 
 def openTCPSocket():
-    serverAddress = get_if_addr('eth2')
+    serverAddress = '172.99.0.73'
     serverSocket = socket(AF_INET, SOCK_STREAM)
     serverSocket.bind((serverAddress, TCP_serverPORT))
     serverSocket.listen(2)

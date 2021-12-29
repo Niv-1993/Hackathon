@@ -41,7 +41,7 @@ def run():
         try:
             # check that the offer is valid as instructed
             # I - unsigned int(4 bytes) B- unsigned char(1 byte) H -"unsigned short(2 bytes)
-            cookie, msg_type, TCP_server_port = struct.unpack('IBH', offer)
+            cookie, msg_type, TCP_server_port = struct.unpack('!IBH', offer)
             if cookie == EXPECTED_COOKIE and msg_type == EXPECTED_OFFER_TYPE:
                 server_IP_PORT = (serverAddress[0], TCP_server_port)
                 TCP_clientSocket.connect(server_IP_PORT)  # if it fails it will continue the loop for other offers
