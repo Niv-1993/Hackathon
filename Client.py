@@ -63,7 +63,7 @@ def answerQuestion(TCP_clientSocket):
     try:
         reads, _, _ = select([sys.stdin, TCP_clientSocket], [], [], TIMEOUT)
         if len(reads) > 0 and reads[0] == sys.stdin:
-            ans = sys.stdin.readline().encode()
+            ans = (sys.stdin.readline()[:-1]).encode() #remove '\n' char from the end
             TCP_clientSocket.send(ans)
         ans_server = TCP_clientSocket.recv(BUFFER_SIZE).decode()
         print(ans_server)

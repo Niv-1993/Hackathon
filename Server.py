@@ -101,9 +101,9 @@ def initGame():
         reads, _, _ = select([team1_socket, team2_socket], [], [], TIMEOUT)
         if len(reads) > 0:
             if reads[0] == team1_socket:
-                team1_ans = (True, team1_socket.recv(BUFFER_SIZE).decode()[:-1])  # Remove the '\n' char from the end
+                team1_ans = (True, team1_socket.recv(BUFFER_SIZE).decode())
             elif reads[0] == team2_socket:
-                team2_ans = (True, team2_socket.recv(BUFFER_SIZE).decode()[:-1])  # Remove the '\n' char from the end
+                team2_ans = (True, team2_socket.recv(BUFFER_SIZE).decode())
         end_msg = generateEndMsg(team1_name, team1_ans, team2_name, team2_ans, ans)
         # send back results
         team1_socket.send(end_msg.encode())
