@@ -2,6 +2,7 @@ import struct
 import sys
 from select import select
 from socket import *
+from scapy.arch import get_if_addr
 
 # Colors for strings
 HEADER = '\033[95m'
@@ -31,7 +32,8 @@ def run():
     UDP_clientSocket.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
     # SOL_SOCKET - search in the socket level itself
     # SO_BROADCAST - This option controls whether datagrams may be broadcast from the socket. The value has type int; a nonzero value means “yes”.
-    UDP_clientSocket.bind(('', UDP_serverPort))  # (IP,PORT) - listen to specific port
+    serverAddress = get_if_addr('eth2') # to connect to the test network in ssh -> not needed in normal
+    UDP_clientSocket.bind((serverAddress, UDP_serverPort))  # (IP,PORT) - listen to specific port
     while True:
         offer, serverAddress = UDP_clientSocket.recvfrom(BUFFER_SIZE)  # blocking
         print(OKGREEN+BOLD+"Received offer from {0}, attempting to connect...".format(serverAddress[0]))
