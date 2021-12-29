@@ -48,7 +48,7 @@ def sendBroadcastToClients():
 
 
 def openTCPSocket():
-    serverAddress = '172.99.0.73'
+    serverAddress = get_if_addr('eth2')
     serverSocket = socket(AF_INET, SOCK_STREAM)
     serverSocket.bind((serverAddress, TCP_serverPORT))
     serverSocket.listen(2)
